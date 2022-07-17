@@ -1,0 +1,88 @@
+{
+	"info": {
+		"_postman_id": "332fffad-a7ca-46cf-9f12-83f3db981593",
+		"name": "Laravel Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11560803"
+	},
+	"item": [
+		{
+			"name": "Get Api Keys",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://laravel-demo.test/api/api-keys",
+					"protocol": "http",
+					"host": [
+						"laravel-demo",
+						"test"
+					],
+					"path": [
+						"api",
+						"api-keys"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Api Key",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"service\": \"vfd\",\n    \"type\": \"random\",\n    \"username\": \"test-api-key-2\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://laravel-demo.test/api/api-keys/store",
+					"protocol": "http",
+					"host": [
+						"laravel-demo",
+						"test"
+					],
+					"path": [
+						"api",
+						"api-keys",
+						"store"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Api Key",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://laravel-demo.test/api/api-keys/:key/delete",
+					"protocol": "http",
+					"host": [
+						"laravel-demo",
+						"test"
+					],
+					"path": [
+						"api",
+						"api-keys",
+						":key",
+						"delete"
+					],
+					"variable": [
+						{
+							"key": "key",
+							"value": "74c9e2ff-9648-46fd-a346-46952830378c"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
