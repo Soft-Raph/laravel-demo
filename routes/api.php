@@ -17,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/api-keys', [\App\Http\Controllers\ApiKeyController::class, 'index']);
+Route::post('/api-keys/store', [\App\Http\Controllers\ApiKeyController::class, 'store']);
+Route::delete('/api-keys/{key}/delete', [\App\Http\Controllers\ApiKeyController::class, 'destroy']);
