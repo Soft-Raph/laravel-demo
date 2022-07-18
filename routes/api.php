@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [\App\Http\Controllers\LoginController::class, 'login'])->name('login');
 Route::post('register', [\App\Http\Controllers\RegisterController::class, 'register'])->name('register');
-Route::get('api-keys', [\App\Http\Controllers\ApiKeyController::class, 'index'])->name('api-keys');
-Route::post('api-keys/store', [\App\Http\Controllers\ApiKeyController::class, 'store'])->name('api-keys.store');
-Route::delete('api-keys/{key}/delete', [\App\Http\Controllers\ApiKeyController::class, 'destroy'])->name('api-keys.destroy');
+
+Route::group(['middleware' => 'passport'], function (){
+    Route::get('api-keys', [\App\Http\Controllers\ApiKeyController::class, 'index'])->name('api_keys');
+    Route::post('api-keys/store', [\App\Http\Controllers\ApiKeyController::class, 'store'])->name('api_keys.store');
+    Route::delete('api-keys/{key}/delete', [\App\Http\Controllers\ApiKeyController::class, 'destroy'])->name('api_keys.destroy');
+});

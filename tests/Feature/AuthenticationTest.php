@@ -7,11 +7,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
-class UserLoginTest extends TestCase
+class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function jsonResponse(string $status, string $message, $data): array
+    private function jsonResponse(string $status, string $message, $data = null): array
     {
         return [
             'status' => $status,

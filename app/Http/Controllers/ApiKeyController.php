@@ -9,8 +9,10 @@ use App\Http\Resources\ApiKeyResource;
 use App\Models\ApiKey;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class ApiKeyController extends Controller
 {
@@ -26,17 +28,23 @@ class ApiKeyController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
         $this->ApiKey = ApiKey::query();
         $this->ApiKeyHelper = new ApiKeyHelper();
     }
 
     public function index(): \Illuminate\Http\JsonResponse
     {
-        $api_keys = Cache::remember('cico-api-keys', 60 * 24, function (){
-            return $this->ApiKey->get();
+        $user = Auth::guard('api')->user();
+        $user_id = $user->id;
+        $api_keys = Cache::remember('cico-api-keys', 60 * 24, function () use ($user_id){
+            return $this->ApiKey
+                ->where('user_id', $user_id)
+                ->first();
         });
-        return ResponseHelper::success(ApiKeyResource::collection($api_keys), 'Api keys fetched successfully');
+        if (! $api_keys){
+            return ResponseHelper::success([], 'Api keys fetched successfully');
+        }
+        return ResponseHelper::success(ApiKeyResource::make($api_keys), 'Api keys fetched successfully');
     }
 
 
@@ -49,7 +57,7 @@ class ApiKeyController extends Controller
         $data['app_id'] = $this->ApiKeyHelper->generateAppID();
         $data['public_key'] = $this->ApiKeyHelper->generatePublicKey();
         $data['private_key'] = $this->ApiKeyHelper->generatePrivateKey();
-        $data['user_id'] = auth()->user()->id;
+        $data['user_id'] = Auth::guard('api')->user()->id;
 
         $create = $this->ApiKey->create($data);
         if (! $create){
@@ -63,7 +71,10 @@ class ApiKeyController extends Controller
 
     public function destroy($key): \Illuminate\Http\JsonResponse
     {
+        $user = Auth::guard('api')->user();
+        $user_id = $user->id;
         $api_key = $this->ApiKey
+            ->where('user_id', $user_id)
             ->where('uuid', $key)
             ->first();
         if (! $api_key){
