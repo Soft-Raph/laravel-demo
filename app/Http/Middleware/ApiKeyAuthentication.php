@@ -25,7 +25,7 @@ class ApiKeyAuthentication
             return ResponseHelper::error(401, 'Access denied, check the public key used');
         }
 
-        $user = $check_api_key->user;
+        $user = $check_api_key->user();
         $token = $user->createToken('Personal Access Token')->accessToken;
         $request->headers->set('Authorization', 'Bearer '.$token);
 
